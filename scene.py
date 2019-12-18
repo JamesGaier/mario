@@ -41,7 +41,6 @@ class LevelBuilder:
 					self.mario = m.Mario(j*20, i*32)
 					self.m_group = pygame.sprite.Group(self.mario)
 				if image != None and not isMario:
-					print(i*b_h)
 					block = Entity.Entity(j*b_w, i*b_h, b_w, b_h, image[0])
 					self.entities.append(block)
 				isMario = False		
