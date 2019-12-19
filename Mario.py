@@ -16,8 +16,8 @@ class Mario(Entity.Entity):
 		self.animation_frames = len(self.images.runL)
 		self.current_frame = 0
 		self.x_speed = 150
-		self.y_speed = 1000
-		self.gravity = 100
+		self.y_speed = 375
+		self.gravity = 10
 		self.vel = mar_math.Vector2(0, 0)
 		self.jumpPressed = False
 		self.onGround = False
@@ -25,7 +25,6 @@ class Mario(Entity.Entity):
 		self.currentDirection = "L"
 	def update(self, dt, entities):
 		delta_time = float(dt)/1000
-		
 		# if the player pressed z move faster
 		if inp.Input().keyFired(pygame.K_z):
 			self.x_speed = 200
@@ -54,7 +53,7 @@ class Mario(Entity.Entity):
 			self.vel.y += self.gravity*delta_time
 		
 
-
+		# code for animations
 		self.current_time += delta_time
 		if self.current_time >= self.animation_time:
 			if self.vel.x < 0  and self.currentDirection == "L":
@@ -125,7 +124,3 @@ class Mario(Entity.Entity):
 
 	def flip(self):
 		self.image = pygame.transform.flip(self.image, True, False)
-'''
-animation code
-
-'''
