@@ -16,8 +16,11 @@ def main():
 	pygame.init()
 	screen = pygame.display.set_mode(SIZE)
 	
-	levelBuilder = scene.LevelBuilder(SIZE[0], SIZE[1])
+	levelBuilder = scene.LevelBuilder()
 	levelBuilder.read("levels/1-1.txt")
+
+	levelManager = scene.LevelManager(SIZE[0], SIZE[1], levelBuilder.mario, levelBuilder.entities)
+
 	clock = pygame.time.Clock()
 	lastTime = 0
 	dt = 0
@@ -34,8 +37,8 @@ def main():
 					sys.exit()
 
 			screen.fill(BLACK)
-			levelBuilder.update(TIMESTEP)
-			levelBuilder.render(screen)
+			levelManager.update(TIMESTEP)
+			levelManager.render(screen)
 			
 			pygame.display.flip()
 			accumulator -= TIMESTEP

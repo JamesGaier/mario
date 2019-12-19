@@ -16,51 +16,53 @@ class Mario(Entity.Entity):
 		self.animation_frames = len(self.images.run)
 		self.current_frame = 0
 		self.x_speed = 200
-		self.y_speed = 500
+		self.y_speed = 900
 		self.gravity = 100
 		self.vel = mar_math.Vector2(0, 0)
 		self.jumpPressed = False
 		self.onGround = False
-		self.direction = 1
+		self.direction = "L"
+		self.currentDirection = "L"
 	def update(self, dt, entities):
 		delta_time = float(dt)/1000
-
-
+		
+		# if the player pressed z move faster
 		if inp.Input().keyFired(pygame.K_z):
 			self.x_speed = 300
 		else:
 			self.x_speed = 200
+		
+		# input on the x-axis
 		self.vel.x = inp.Input().horizontal()*self.x_speed*delta_time
 
-		
+		# flips mario depending on the direction mario is moving
+		if self.currentDirection != self.direction:
+			self.flip()
+			self.direction = self.currentDirection
+
+		# input on the y-axis
 		if self.jumpPressed != inp.Input().vertical():
 			self.jumpPressed = not self.jumpPressed
 			if self.onGround and self.jumpPressed:
 				self.vel.y += (-inp.Input().vertical()*self.y_speed)*delta_time
 				self.onGround = False
-		if not self.onGround:
-			self.vel.y += int(self.gravity*delta_time)
 		else:
-			self.vel.y = 0
+			self.vel.y += self.gravity*delta_time
 		
-		
-		
-		
-		print(self.vel.x, self.vel.y)
-
-		
-		
+		# seperating the movement into x and y movement
 		if self.vel.x != 0:
 			self.move_single_axis(int(self.vel.x), 0, entities, delta_time)
 		if self.vel.y != 0:
 			self.move_single_axis(0, int(self.vel.y), entities, delta_time)
 
+			
 		
 	def move_single_axis(self, dx, dy, entities, dt):
-				
+		# move			
 		self.rect.x += dx
 		self.rect.y += dy
 
+		#collision detection
 		hit_list = pygame.sprite.spritecollide(self, entities, False)
 		for entity in hit_list:
 			rect = entity.rect
@@ -73,30 +75,41 @@ class Mario(Entity.Entity):
 				self.land(dt)
 			if dy < 0:
 				self.rect.top = rect.bottom
+				self.stop_rising(dt)
 		
 
 
-		'''
-		self.current_time += float(dt)/1000
-		if self.current_time >= self.animation_time:
-			self.current_time = 0
-			self.index = (self.index + 1) % len(self.anim.run)
-			self.image = self.anim.run[int(self.index)]
-		'''
 		
+	# pushes mario down after hitting a block
+	def stop_rising(self, dt):
+		self.vel.y += 0.5*self.y_speed*dt
+
+	# what happens when mario hits the ground after jumping
 	def land(self, dt):
-		
 
 		self.vel.y = 0
 
 		self.onGround = True
 		
-
-		if self.vel.x < 0:
+		if self.vel.x < 0 and self.direction != "L":
+			self.vel.x = -1 * self.x_speed * dt	
+			self.currentDirection = "L"
+		elif self.vel.x < 0 and self.direction == "L":
 			self.vel.x = -1 * self.x_speed * dt
-			
-		
-		if self.vel.x > 0:
+
+		if self.vel.x > 0 and self.direction != "R":
 			self.vel.x = self.x_speed * dt
-		
-		self.onGround = True
+			self.currentDirection = "R"
+		elif self.vel.x > 0 and self.direction == "R":
+			self.vel.x = self.x_speed * dt
+
+	def flip(self):
+		self.image = pygame.transform.flip(self.image, True, False)
+'''
+animation code
+self.current_time += float(dt)/1000
+	if self.current_time >= self.animation_time:
+		self.current_time = 0
+		self.index = (self.index + 1) % len(self.anim.run)
+		self.image = self.anim.run[int(self.index)]
+'''

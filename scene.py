@@ -4,14 +4,12 @@ import pygame
 import ImageCutter as ic
 import Entity
 class LevelBuilder:
-	def __init__(self, w, h):
-		self.w = w
-		self.h = h
-		self.background = Layer.Background(w, h)
+	def __init__(self):
 		self.mario = None
 		self.m_group = None
 		self.entities = []
 		self.images = ic.ImageCutter()
+	# reads level and writes to the world
 	def read(self, path):
 		file = open(path, "r")
 		level = "".join([s for s in file])
@@ -38,18 +36,26 @@ class LevelBuilder:
 					b_h = self.images.bricks[0].get_height()
 				elif level[i][j] == "4":
 					isMario = True
-					self.mario = m.Mario(j*20, i*32)
+					self.mario = m.Mario(j*20, i*16)
 					self.m_group = pygame.sprite.Group(self.mario)
 				if image != None and not isMario:
 					block = Entity.Entity(j*b_w, i*b_h, b_w, b_h, image[0])
 					self.entities.append(block)
 				isMario = False		
-	def update(self, dt):
-		self.m_group.update(dt, self.entities)
-		for entity in self.entities:
-			entity.update(dt)
-	def render(self, screen):
-		self.background.render(screen)
-		self.m_group.draw(screen)
-		for entity in self.entities:
-			entity.render(screen)
+
+class LevelManager:
+    def __init__(self,w, h, mario, entities):
+        self.mario = mario
+        self.m_group = pygame.sprite.Group(self.mario)
+        self.entities = entities
+        self.images = ic.ImageCutter()
+        self.background = Layer.Background(w, h)
+    def update(self, dt):
+        self.m_group.update(dt, self.entities)
+        for entity in self.entities:
+            entity.update(dt)
+    def render(self, screen):
+        self.background.render(screen)
+        self.m_group.draw(screen)
+        for entity in self.entities:
+            entity.render(screen)
