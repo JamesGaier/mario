@@ -13,10 +13,10 @@ class Mario(Entity.Entity):
 		self.index = 0
 		self.animation_time = 0.1
 		self.current_time = 0
-		self.animation_frames = len(self.images.run)
+		self.animation_frames = len(self.images.runL)
 		self.current_frame = 0
-		self.x_speed = 200
-		self.y_speed = 900
+		self.x_speed = 150
+		self.y_speed = 1000
 		self.gravity = 100
 		self.vel = mar_math.Vector2(0, 0)
 		self.jumpPressed = False
@@ -28,9 +28,9 @@ class Mario(Entity.Entity):
 		
 		# if the player pressed z move faster
 		if inp.Input().keyFired(pygame.K_z):
-			self.x_speed = 300
-		else:
 			self.x_speed = 200
+		else:
+			self.x_speed = 150
 		
 		# input on the x-axis
 		self.vel.x = inp.Input().horizontal()*self.x_speed*delta_time
@@ -39,6 +39,10 @@ class Mario(Entity.Entity):
 		if self.currentDirection != self.direction:
 			self.flip()
 			self.direction = self.currentDirection
+
+		
+		
+		
 
 		# input on the y-axis
 		if self.jumpPressed != inp.Input().vertical():
@@ -49,6 +53,22 @@ class Mario(Entity.Entity):
 		else:
 			self.vel.y += self.gravity*delta_time
 		
+
+
+		self.current_time += delta_time
+		if self.current_time >= self.animation_time:
+			if self.vel.x < 0  and self.currentDirection == "L":
+				self.current_time = 0
+				self.index = (self.index + 1) % len(self.images.runL)
+				self.image = self.images.runL[int(self.index)]
+			elif self.vel.x > 0 and self.currentDirection == "R":
+				self.current_time = 0
+				self.index = (self.index + 1) % len(self.images.runR)
+				self.image = self.images.runR[int(self.index)]
+			else:
+				self.image = self.images.idle[0]
+
+
 		# seperating the movement into x and y movement
 		if self.vel.x != 0:
 			self.move_single_axis(int(self.vel.x), 0, entities, delta_time)
@@ -107,9 +127,5 @@ class Mario(Entity.Entity):
 		self.image = pygame.transform.flip(self.image, True, False)
 '''
 animation code
-self.current_time += float(dt)/1000
-	if self.current_time >= self.animation_time:
-		self.current_time = 0
-		self.index = (self.index + 1) % len(self.anim.run)
-		self.image = self.anim.run[int(self.index)]
+
 '''

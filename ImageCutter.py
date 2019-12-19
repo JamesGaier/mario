@@ -1,8 +1,11 @@
 import spritesheet
+import pygame
 class ImageCutter:
 	def __init__(self):
-		self.run = []
-		self.jump = None
+		self.runL = []
+		self.runR = []
+		self.jumpL = None
+		self.jumpR = None
 		self.duck = None
 		self.stop = None
 		self.idle = None
@@ -29,15 +32,22 @@ class ImageCutter:
 		self.idle = self.mario.images_at(tuple(idleRect), (0,0,0,0))
 
 		jumpRect = [(125, 0, 19, 35)]
-		self.jump = self.mario.images_at(tuple(jumpRect), (0,0,0,0))
+		self.jumpL = self.mario.images_at(tuple(jumpRect), (0,0,0,0))
+
+		self.jumpR
 
 		runRects = [(198, 0, 18, 32)]
 		runRects.append((184, 0, 17, 32))
 		runRects.append((164, 0, 18, 32))
-		self.run = self.mario.images_at(tuple(runRects), (0,0,0,0))
-		
+		self.runL = self.mario.images_at(tuple(runRects), (0,0,0,0))
+
+		self.runR = [pygame.transform.flip(image, True, False) for image in self.runL]
+
+
 		duckRect = [(274, 0, 19, 32)]
 		self.duck = self.mario.images_at(tuple(duckRect), (0,0,0,0))
+
+		
 
 		stopRect = [(145, 0, 19, 32)]
 		self.stop = self.mario.images_at(tuple(stopRect), (0,0,0,0))
