@@ -31,10 +31,11 @@ class ImageCutter:
 		idleRect = [(236, 0, 19, 32)]
 		self.idle = self.mario.images_at(tuple(idleRect), (0,0,0,0))
 
+		self.idleR = [pygame.transform.flip(self.idle[0], True, False)]
 		jumpRect = [(125, 0, 19, 35)]
 		self.jumpL = self.mario.images_at(tuple(jumpRect), (0,0,0,0))
 
-		self.jumpR
+		self.jumpR = [pygame.transform.flip(self.jumpL[0], True, False)]
 
 		runRects = [(198, 0, 18, 32)]
 		runRects.append((184, 0, 17, 32))
@@ -70,6 +71,7 @@ class ImageCutter:
 		self.stopf = self.mario.images_at(tuple(stopRectf), (0,0,0,0))
 
 ########################## other tiles ########################
+
 		skyRect = [(48, 336, 16, 16)]
 		self.sky = self.objects.images_at(tuple(skyRect), (0,0,0,0))
 
