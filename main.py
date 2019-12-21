@@ -12,10 +12,10 @@ SIZE = (640, 640)
 MAX_FPS = 60
 TIMESTEP = 1000/MAX_FPS
 def main():
-		
+
 	pygame.init()
 	screen = pygame.display.set_mode(SIZE)
-	
+
 	levelBuilder = scene.LevelBuilder()
 	levelBuilder.read("levels/1-1.txt")
 
@@ -24,11 +24,11 @@ def main():
 	clock = pygame.time.Clock()
 	lastTime = 0
 	dt = 0
-	
+
 	playing = True
 	accumulator = 0
 	while playing:
-		dt = clock.tick(60)	
+		dt = clock.tick(60)
 		accumulator += dt
 		if accumulator > TIMESTEP:
 
@@ -38,8 +38,10 @@ def main():
 
 			screen.fill(BLACK)
 			levelManager.update(TIMESTEP)
+
+			levelManager.run_viewbox()
 			levelManager.render(screen)
-			
+
 			pygame.display.flip()
 			accumulator -= TIMESTEP
 
