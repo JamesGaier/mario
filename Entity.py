@@ -7,4 +7,5 @@ class Entity(pygame.sprite.Sprite):
 		self.image = image
 		self.rect = pygame.Rect(x, y, w, h)
 	def render(self, screen):
-		screen.blit(self.image, self.rect)
+		if self.image != None:
+			screen.blit(self.image, self.rect)

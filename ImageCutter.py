@@ -22,11 +22,12 @@ class ImageCutter:
 		self.stops = None
 		self.idles = None
 		self.flagPoles = []
+		self.debris = None
 		self.mario = spritesheet.spritesheet("images/characters.gif")
 		self.objects = spritesheet.spritesheet("images/tiles.png")
 		self.cutImage()
 	def cutImage(self):
-		
+
 ################# mario animation frames ######################
 		idleRect = [(236, 0, 19, 32)]
 		self.idle = self.mario.images_at(tuple(idleRect), (0,0,0,0))
@@ -48,11 +49,11 @@ class ImageCutter:
 		duckRect = [(274, 0, 19, 32)]
 		self.duck = self.mario.images_at(tuple(duckRect), (0,0,0,0))
 
-		
+
 
 		stopRect = [(145, 0, 19, 32)]
 		self.stop = self.mario.images_at(tuple(stopRect), (0,0,0,0))
-		
+
 		idleRectf = [(236, 125, 19, 32)]
 		self.idlef = self.mario.images_at(tuple(idleRectf), (0,0,0,0))
 
@@ -80,6 +81,9 @@ class ImageCutter:
 
 		questionRect = [(384,0, 16, 16)]
 		self.question = self.objects.images_at(tuple(questionRect))
-		
+
 		bricksRect = [(16,0, 16, 16)]
 		self.bricks = self.objects.images_at(tuple(bricksRect))
+
+		debrisRect = [(231, 0, 8, 8)]
+		self.debris = self.objects.images_at(tuple(debrisRect))

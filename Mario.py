@@ -4,6 +4,7 @@ import mar_math
 import Input as inp
 import time
 import Entity
+
 class Mario(Entity.Entity):
 	def __init__(self, x, y):
 		super().__init__(x,y,20,32, ic.ImageCutter().idle[0])
@@ -23,8 +24,6 @@ class Mario(Entity.Entity):
 		self.onGround = False
 		self.direction = "L"
 		self.currentDirection = "L"
-		self.jumpTimer = 0
-		self.jumpSize = 0
 	def update(self, dt, entities):
 		delta_time = float(dt)/1000
 		# if the player pressed z move faster
@@ -32,12 +31,12 @@ class Mario(Entity.Entity):
 			self.x_speed = 200
 		else:
 			self.x_speed = 150
-		
+
 		# input on the x-axis
 		self.vel.x = inp.Input().horizontal()*self.x_speed*delta_time
 
 		# flips mario depending on the direction mario is moving
-		
+
 		if self.currentDirection != self.direction:
 			if self.currentDirection == "L":
 				self.image = self.images.idle[0]
@@ -45,10 +44,10 @@ class Mario(Entity.Entity):
 				self.image = self.images.idleR[0]
 			self.direction = self.currentDirection
 
-		
-		
-			
-		
+
+
+
+
 		# input on the y-axis
 		if self.jumpPressed != inp.Input().vertical():
 			self.jumpPressed = not self.jumpPressed
@@ -62,7 +61,7 @@ class Mario(Entity.Entity):
 				self.onGround = False
 		else:
 			self.vel.y += self.gravity*delta_time
-			
+
 
 		# code for animations
 		self.current_time += delta_time
@@ -91,10 +90,10 @@ class Mario(Entity.Entity):
 		if self.vel.y != 0:
 			self.move_single_axis(0, int(self.vel.y), entities, delta_time)
 
-			
-		
+
+
 	def move_single_axis(self, dx, dy, entities, dt):
-		# move			
+		# move
 		self.rect.x += dx
 		self.rect.y += dy
 
@@ -112,10 +111,10 @@ class Mario(Entity.Entity):
 			if dy < 0:
 				self.rect.top = rect.bottom
 				self.stop_rising(dt)
-		
 
 
-		
+
+
 	# pushes mario down after hitting a block
 	def stop_rising(self, dt):
 		self.vel.y += 0.5*self.max_y_speed*dt
@@ -126,9 +125,9 @@ class Mario(Entity.Entity):
 		self.vel.y = 0
 
 		self.onGround = True
-		
+
 		if self.vel.x < 0 and self.direction != "L":
-			self.vel.x = -1 * self.x_speed * dt	
+			self.vel.x = -1 * self.x_speed * dt
 			self.currentDirection = "L"
 		elif self.vel.x < 0 and self.direction == "L":
 			self.vel.x = -1 * self.x_speed * dt

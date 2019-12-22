@@ -19,7 +19,8 @@ def main():
 	levelBuilder = scene.LevelBuilder()
 	levelBuilder.read("levels/1-1.txt")
 
-	levelManager = scene.LevelManager(SIZE[0], SIZE[1], levelBuilder.mario, levelBuilder.entities)
+	levelManager = scene.LevelManager(SIZE[0], SIZE[1], levelBuilder.mario, levelBuilder.entities,\
+					levelBuilder.total_width)
 
 	clock = pygame.time.Clock()
 	lastTime = 0
