@@ -43,6 +43,7 @@ def main():
 			levelManager.run_viewbox()
 			levelManager.render(screen)
 
+
 			pygame.display.flip()
 			accumulator -= TIMESTEP
 

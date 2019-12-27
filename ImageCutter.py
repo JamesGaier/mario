@@ -25,6 +25,7 @@ class ImageCutter:
 		self.debris = None
 		self.mario = spritesheet.spritesheet("images/characters.gif")
 		self.objects = spritesheet.spritesheet("images/tiles.png")
+		self.objects1 = spritesheet.spritesheet("images/blocks1.png")
 		self.cutImage()
 	def cutImage(self):
 
@@ -82,8 +83,15 @@ class ImageCutter:
 		questionRect = [(384,0, 16, 16)]
 		self.question = self.objects.images_at(tuple(questionRect))
 
+		questHitRect = [(432, 0, 16, 16)]
+		self.question_hit = self.objects.images_at(tuple(questHitRect))
+
 		bricksRect = [(16,0, 16, 16)]
 		self.bricks = self.objects.images_at(tuple(bricksRect))
 
-		debrisRect = [(231, 0, 8, 8)]
-		self.debris = self.objects.images_at(tuple(debrisRect))
+
+		debrisRect = [(68, 36, 8, 8)]
+		debrisRect.append((68, 22, 8, 8))
+		self.debris = self.objects1.images_at(tuple(debrisRect), (0,0,0,0))
+		self.debris.append(pygame.transform.flip(self.debris[0], True, False))
+		self.debris.append(pygame.transform.flip(self.debris[1], True, False))

@@ -62,7 +62,6 @@ class Mario(Entity.Entity):
 		else:
 			self.vel.y += self.gravity*delta_time
 
-
 		# code for animations
 		self.current_time += delta_time
 		if self.current_time >= self.animation_time:
@@ -100,17 +99,18 @@ class Mario(Entity.Entity):
 		#collision detection
 		hit_list = pygame.sprite.spritecollide(self, entities, False)
 		for entity in hit_list:
-			rect = entity.rect
-			if dx > 0:
-				self.rect.right = rect.left
-			if dx < 0:
-				self.rect.left = rect.right
-			if dy > 0:
-				self.rect.bottom = rect.top
-				self.land(dt)
-			if dy < 0:
-				self.rect.top = rect.bottom
-				self.stop_rising(dt)
+			if not entity.static:
+				rect = entity.rect
+				if dx > 0:
+					self.rect.right = rect.left
+				if dx < 0:
+					self.rect.left = rect.right
+				if dy > 0:
+					self.rect.bottom = rect.top
+					self.land(dt)
+				if dy < 0:
+					self.rect.top = rect.bottom
+					self.stop_rising(dt)
 
 
 

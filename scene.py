@@ -1,8 +1,13 @@
+import os,sys
 import Layer
 import Mario as m
 import pygame
 import ImageCutter as ic
 import Entity
+scriptpath = "./blocks"
+sys.path.append(os.path.abspath(scriptpath))
+import brick
+import question
 class LevelBuilder:
 	def __init__(self):
 		self.mario = None
@@ -28,13 +33,13 @@ class LevelBuilder:
 					b_w = self.images.brick[0].get_width()
 					b_h = self.images.brick[0].get_height()
 				elif level[i][j] == "2":
-					image = self.images.question
-					b_w = self.images.question[0].get_width()
-					b_h = self.images.question[0].get_height()
+					my_question = question.Question((j*b_w, i*b_h))
+					self.entities.append(my_question)
+					continue
 				elif level[i][j] == "3":
-					image = self.images.bricks
-					b_w = self.images.bricks[0].get_width()
-					b_h = self.images.bricks[0].get_height()
+					my_brick = brick.Brick((j*b_w, i*b_h))
+					self.entities.append(my_brick)
+					continue
 				elif level[i][j] == "4":
 					isMario = True
 					self.mario = m.Mario(j*16, i*16)
@@ -65,7 +70,7 @@ class LevelManager:
 	def update(self, dt):
 		self.m_group.update(dt, self.entities)
 		for entity in self.entities:
-			entity.update(dt)
+			entity.update(dt, self.mario)
 	# renders all of the entities
 	def render(self, screen):
 		self.background.render(screen)
@@ -82,6 +87,7 @@ class LevelManager:
 		# add boundry for end of level
 		for entity in self.entities:
 			entity.rect.x += shift_x
+			entity.anim_rect.x += shift_x
 	# math for scrolling
 	def run_viewbox(self):
 		if self.mario.rect.x <= self.left_viewbox:
