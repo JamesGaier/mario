@@ -1,6 +1,3 @@
-# mario
-Mario clone
-
 <h1>Super Mario Bros. clone</h1>
 
 <h5>Controls:</h5>
