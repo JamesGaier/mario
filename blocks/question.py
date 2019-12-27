@@ -6,26 +6,25 @@ import pygame
 scriptpath = "../"
 sys.path.append(os.path.abspath(scriptpath))
 import Entity
-from ImageCutter import *
 class Question(Entity.Entity):
-    def __init__(self, pos):
-        super().__init__(pos[0], pos[1], 16, 16, ImageCutter().question[0])
-        self.image_cutter = ImageCutter()
+    def __init__(self, pos, images):
+        super().__init__(pos[0], pos[1], images.question[0].get_rect().w,\
+         images.question[0].get_rect().h,images.question[0])
+        self.image_cutter = images
         self.image = self.image_cutter.question[0]
         self.hit_image = self.image_cutter.question_hit[0]
         self.hit = False
-        self.isEmpty = False
         self.vel = -3
         self.gravity = 0.5
         self.org_pos = self.rect.y
     def update(self, dt, mario):
         delta = float(dt)/1000
         hit = self.rect.bottom == mario.rect.top\
-            and self.rect.left-self.rect.w+7 <= mario.rect.left\
-            and self.rect.right+self.rect.w-6 >= mario.rect.right
+            and self.rect.left-self.rect.w+15 <= mario.rect.left\
+            and self.rect.right+self.rect.w-13 >= mario.rect.right
         if hit:
             self.hit = True
-        if self.hit and not self.isEmpty:
+        if self.hit:
             self.image = self.hit_image
             self.anim_rect.y +=  int(self.vel)
             self.vel += self.gravity
@@ -33,7 +32,6 @@ class Question(Entity.Entity):
                 self.anim_rect.y = self.org_pos
                 self.vel = 0
                 self.hit = False
-        print(self.rect.y)
     def render(self, screen):
         screen.blit(self.image, self.anim_rect)
 

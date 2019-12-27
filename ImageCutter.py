@@ -28,15 +28,18 @@ class ImageCutter:
 		self.objects1 = spritesheet.spritesheet("images/blocks1.png")
 		self.cutImage()
 	def cutImage(self):
-
 ################# mario animation frames ######################
 		idleRect = [(236, 0, 19, 32)]
 		self.idle = self.mario.images_at(tuple(idleRect), (0,0,0,0))
+		self.idle[0] = pygame.transform.scale(self.idle[0], (int(self.idle[0].get_rect().w * 2)\
+		,int(self.idle[0].get_rect().h * 2)))
 
 		self.idleR = [pygame.transform.flip(self.idle[0], True, False)]
+
 		jumpRect = [(125, 0, 19, 35)]
 		self.jumpL = self.mario.images_at(tuple(jumpRect), (0,0,0,0))
-
+		self.jumpL[0] = pygame.transform.scale(self.jumpL[0], (int(self.jumpL[0].get_rect().w * 2)\
+		,int(self.jumpL[0].get_rect().h * 2)))
 		self.jumpR = [pygame.transform.flip(self.jumpL[0], True, False)]
 
 		runRects = [(198, 0, 18, 32)]
@@ -44,12 +47,16 @@ class ImageCutter:
 		runRects.append((164, 0, 18, 32))
 		self.runL = self.mario.images_at(tuple(runRects), (0,0,0,0))
 
-		self.runR = [pygame.transform.flip(image, True, False) for image in self.runL]
+		for i in range(len(self.runL)):
+			self.runL[i] = pygame.transform.scale(self.runL[i], (int(self.runL[i].get_rect().w * 2)\
+		,int(self.runL[i].get_rect().h * 2)))
 
+		self.runR = [pygame.transform.flip(image, True, False) for image in self.runL]
 
 		duckRect = [(274, 0, 19, 32)]
 		self.duck = self.mario.images_at(tuple(duckRect), (0,0,0,0))
-
+		self.duck[0] = pygame.transform.scale(self.duck[0], (int(self.duck[0].get_rect().w * 2)\
+		,int(self.duck[0].get_rect().h * 2)))
 
 
 		stopRect = [(145, 0, 19, 32)]
@@ -79,16 +86,20 @@ class ImageCutter:
 
 		brickRect = [(0, 0, 16, 16)]
 		self.brick = self.objects.images_at(tuple(brickRect))
-
+		self.brick[0] = pygame.transform.scale(self.brick[0], (int(self.brick[0].get_rect().w * 2)\
+		,int(self.brick[0].get_rect().h * 2)))
 		questionRect = [(384,0, 16, 16)]
 		self.question = self.objects.images_at(tuple(questionRect))
-
+		self.question[0] = pygame.transform.scale(self.question[0], (int(self.question[0].get_rect().w * 2)\
+		,int(self.question[0].get_rect().h * 2)))
 		questHitRect = [(432, 0, 16, 16)]
 		self.question_hit = self.objects.images_at(tuple(questHitRect))
-
-		bricksRect = [(16,0, 16, 16)]
+		self.question_hit[0] = pygame.transform.scale(self.question_hit[0], (int(self.question_hit[0].get_rect().w * 2)\
+		,int(self.question_hit[0].get_rect().h * 2)))
+		bricksRect = [(16, 0, 16, 16)]
 		self.bricks = self.objects.images_at(tuple(bricksRect))
-
+		self.bricks[0] = pygame.transform.scale(self.bricks[0] , (int(self.bricks[0].get_rect().w * 2)\
+		,int(self.bricks[0].get_rect().h * 2)))
 
 		debrisRect = [(68, 36, 8, 8)]
 		debrisRect.append((68, 22, 8, 8))

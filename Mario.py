@@ -1,25 +1,23 @@
 import pygame
-import ImageCutter as ic
-import mar_math
 import Input as inp
 import time
 import Entity
 
 class Mario(Entity.Entity):
-	def __init__(self, x, y):
-		super().__init__(x,y,20,32, ic.ImageCutter().idle[0])
-		self.w = 20
-		self.h = 32
-		self.images = ic.ImageCutter()
+	def __init__(self, x, y, image, images):
+		super().__init__(x,y,image.get_rect().w,image.get_rect().h, image)
+		self.w = image.get_rect().w
+		self.h = image.get_rect().h
+		self.images = images
 		self.index = 0
 		self.animation_time = 0.1
 		self.current_time = 0
 		self.animation_frames = len(self.images.runL)
 		self.current_frame = 0
-		self.x_speed = 150
-		self.max_y_speed = 375
-		self.gravity = 10
-		self.vel = mar_math.Vector2(0, 0)
+		self.x_speed = 230
+		self.y_speed = 550
+		self.gravity = 15
+		self.vel = pygame.Vector2(0, 0)
 		self.jumpPressed = False
 		self.onGround = False
 		self.direction = "L"
@@ -28,9 +26,9 @@ class Mario(Entity.Entity):
 		delta_time = float(dt)/1000
 		# if the player pressed z move faster
 		if inp.Input().keyFired(pygame.K_z):
-			self.x_speed = 200
+			self.x_speed = 275
 		else:
-			self.x_speed = 150
+			self.x_speed = 230
 
 		# input on the x-axis
 		self.vel.x = inp.Input().horizontal()*self.x_speed*delta_time
@@ -47,7 +45,7 @@ class Mario(Entity.Entity):
 
 
 
-
+		# make ground check to check if player hasn't fallen off platform
 		# input on the y-axis
 		if self.jumpPressed != inp.Input().vertical():
 			self.jumpPressed = not self.jumpPressed
@@ -56,8 +54,7 @@ class Mario(Entity.Entity):
 					self.image = self.images.jumpL[0]
 				elif self.direction == "R":
 					self.image = self.images.jumpR[0]
-				y_speed = self.max_y_speed
-				self.vel.y += (-inp.Input().vertical()*y_speed)*delta_time
+				self.vel.y += (-inp.Input().vertical()*self.y_speed)*delta_time
 				self.onGround = False
 		else:
 			self.vel.y += self.gravity*delta_time
@@ -117,7 +114,7 @@ class Mario(Entity.Entity):
 
 	# pushes mario down after hitting a block
 	def stop_rising(self, dt):
-		self.vel.y += 0.5*self.max_y_speed*dt
+		self.vel.y += 0.5*self.y_speed*dt
 
 	# what happens when mario hits the ground after jumping
 	def land(self, dt):

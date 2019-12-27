@@ -2,18 +2,17 @@ import os,sys
 import Layer
 import Mario as m
 import pygame
-import ImageCutter as ic
 import Entity
 scriptpath = "./blocks"
 sys.path.append(os.path.abspath(scriptpath))
 import brick
 import question
 class LevelBuilder:
-	def __init__(self):
+	def __init__(self, images):
 		self.mario = None
 		self.m_group = None
 		self.entities = []
-		self.images = ic.ImageCutter()
+		self.images = images
 		self.total_width = 0
 	# reads level and writes to the world
 	def read(self, path):
@@ -22,8 +21,8 @@ class LevelBuilder:
 		level = level.split("\n")
 		for i in range(len(level)):
 			level[i] = list(level[i])
-		b_w = 16
-		b_h = 16
+		b_w = 32
+		b_h = 32
 		isMario = False
 		for i in range(len(level)):
 			for j in range(len(level[0])):
@@ -33,36 +32,35 @@ class LevelBuilder:
 					b_w = self.images.brick[0].get_width()
 					b_h = self.images.brick[0].get_height()
 				elif level[i][j] == "2":
-					my_question = question.Question((j*b_w, i*b_h))
+					my_question = question.Question((j*b_w, i*b_h), self.images)
 					self.entities.append(my_question)
 					continue
 				elif level[i][j] == "3":
-					my_brick = brick.Brick((j*b_w, i*b_h))
+					my_brick = brick.Brick((j*b_w, i*b_h), self.images)
 					self.entities.append(my_brick)
 					continue
 				elif level[i][j] == "4":
 					isMario = True
-					self.mario = m.Mario(j*16, i*16)
+					self.mario = m.Mario(j*32, i*32, self.images.idle[0], self.images)
 					self.m_group = pygame.sprite.Group(self.mario)
 				elif level[i][j] == "5":
-					block = Entity.Entity(j*16, i*16, 16, 16, None)
+					block = Entity.Entity(j*32, i*32, 32, 32, None)
 					self.entities.append(block)
 				if image != None and not isMario:
 					block = Entity.Entity(j*b_w, i*b_h, b_w, b_h, image[0])
 					self.entities.append(block)
 				isMario = False
-				self.total_width = len(level[0])*16
+				self.total_width = len(level[0])*32
 
 class LevelManager:
-	def __init__(self, w, h, mario, entities, total_width):
+	def __init__(self, w, h, mario, entities, images, total_width):
 		self.total_width = total_width
 		self.w = w
 		self.h = h
 		self.mario = mario
 		self.m_group = pygame.sprite.Group(self.mario)
 		self.entities = entities
-		self.images = ic.ImageCutter()
-		self.background = Layer.Background(w, h)
+		self.background = Layer.Background(w, h, images)
 		self.world_shift_x = self.world_shift_y = 0
 		self.left_viewbox = int(w/2 - w/8)
 		self.right_viewbox = int(w/2 + w/12)
@@ -80,8 +78,8 @@ class LevelManager:
 	# shifts the world by a certian amount
 	def shift_world(self, shift_x, shift_y):
 		self.world_shift_x += shift_x
-		if self.world_shift_x > -16:
-			self.left_viewbox = -16
+		if self.world_shift_x > -32:
+			self.left_viewbox = -32
 		else:
 			self.left_viewbox = int(self.w/2 - self.w/8)
 		# add boundry for end of level

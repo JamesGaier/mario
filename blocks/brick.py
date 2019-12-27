@@ -3,11 +3,11 @@ import pygame
 scriptpath = "../"
 sys.path.append(os.path.abspath(scriptpath))
 import Entity
-from ImageCutter import *
 class Brick(Entity.Entity):
-    def __init__(self, pos):
-        super().__init__(pos[0], pos[1], 16, 16, ImageCutter().bricks[0])
-        self.image_cutter = ImageCutter()
+    def __init__(self, pos, images):
+        super().__init__(pos[0], pos[1], images.bricks[0].get_rect().w,\
+        images.bricks[0].get_rect().h, images.bricks[0])
+        self.image_cutter = images
         self.image = self.image_cutter.bricks[0]
         self.debris_rects = []
         self.debris = self.image_cutter.debris
@@ -15,20 +15,27 @@ class Brick(Entity.Entity):
             self.debris_rects.append(pygame.Rect(self.rect.x, self.rect.y,\
             self.rect.w, self.rect.h))
         self.hit = False
+        self.vel = -3
+        self.gravity = 0.5
+        self.org_pos = self.pos.y
     def update(self, dt, mario):
-        self.hit = self.rect.bottom == mario.rect.top\
-                    and self.rect.left-self.rect.w <= mario.rect.left\
-                    and self.rect.right+self.rect.w >= mario.rect.right
+        delta = float(dt)/1000
+        hit = self.rect.bottom == mario.rect.top\
+            and self.rect.left-self.rect.w+7 <= mario.rect.left\
+            and self.rect.right+self.rect.w-6 >= mario.rect.right
+        if hit:
+            self.hit = True
         if self.hit:
-            pass
+            self.anim_rect.y +=  int(self.vel)
+            self.vel += self.gravity
+            if self.anim_rect.y >= self.org_pos:
+                self.anim_rect.y = self.org_pos
+                self.vel = -3
+                self.hit = False
 
     def render(self, screen):
         '''
         if the block is hit run the animation then delete once the
         particles are out of bounds.
         '''
-        if not self.hit:
-            screen.blit(self.image, self.rect)
-        else:
-            for debris in self.debris:
-                screen.blit(debris, self.rect)
+        screen.blit(self.image, self.anim_rect)

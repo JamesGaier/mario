@@ -1,10 +1,9 @@
 import sys, pygame
 import time
 import Mario as m
-import Input as inp
 import Layer
 import scene
-import mar_math
+from ImageCutter import *
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
 
@@ -14,13 +13,14 @@ TIMESTEP = 1000/MAX_FPS
 def main():
 
 	pygame.init()
+	pygame.display.set_caption("Super Mario")
 	screen = pygame.display.set_mode(SIZE)
-
-	levelBuilder = scene.LevelBuilder()
+	images = ImageCutter()
+	levelBuilder = scene.LevelBuilder(images)
 	levelBuilder.read("levels/1-1.txt")
 
 	levelManager = scene.LevelManager(SIZE[0], SIZE[1], levelBuilder.mario, levelBuilder.entities,\
-					levelBuilder.total_width)
+					images, levelBuilder.total_width)
 
 	clock = pygame.time.Clock()
 	lastTime = 0
